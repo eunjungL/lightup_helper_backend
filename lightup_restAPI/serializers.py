@@ -1,9 +1,19 @@
 from rest_framework import serializers
-from lightup.models import UserInfo
+from lightup.models import *
 from chat.models import Message
 from django.contrib.auth.models import User
 from django.contrib.auth.password_validation import validate_password
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
+
+
+# User
+class LoginSerializer(TokenObtainPairSerializer):
+    @classmethod
+    def get_token(cls, user):
+        token = super(LoginSerializer, cls).get_token(user)
+
+        token['username'] = user.username
+        return token
 
 
 class UserInfoSerializer(serializers.ModelSerializer):
@@ -37,15 +47,39 @@ class UserInfoSerializer(serializers.ModelSerializer):
         return user_info
 
 
-class LoginSerializer(TokenObtainPairSerializer):
-    @classmethod
-    def get_token(cls, user):
-        token = super(LoginSerializer, cls).get_token(user)
-
-        token['username'] = user.username
-        return token
+class UserBorrowStateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = UserBorrowState
+        fields = "__all__"
 
 
+class UserLocationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = UserLocation
+        fields = "__all__"
+
+
+# Donation
+class DonationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Donation
+        fields = "__all__"
+
+
+class DonationUser(serializers.ModelSerializer):
+    class Meta:
+        model = DonationUser
+        fields = "__all__"
+
+
+# Borrow
+class BorrowStateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = BorrowState
+        fields = "__all__"
+
+
+# Chat
 class MessageSerializer(serializers.ModelSerializer):
     class Meta:
         model = Message
