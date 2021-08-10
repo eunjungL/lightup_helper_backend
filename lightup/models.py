@@ -20,7 +20,7 @@ class UserInfo(models.Model):
 
 
 class UserLocation(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE, null=True)
+    user = models.OneToOneField(UserInfo, on_delete=models.CASCADE, null=True)
     location = PlainLocationField()
 
 

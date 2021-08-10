@@ -20,6 +20,7 @@ from lightup_restAPI import views
 
 router = DefaultRouter()
 router.register(r'users', views.UserInfoViewSet)
+router.register(r'user/location', views.UserLocationViewSet)
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -27,5 +28,9 @@ urlpatterns = [
 
     path('login/', views.LoginView.as_view(), name='token_obtain_pair'),
 
-    path('chat/', include('chat.urls'))
+    path('chat/', include('chat.urls')),
+
+    # user update
+    path('update/borrowState/user/', views.UserBorrowStateUpdateView.as_view()),
+    path('update/location/user/', views.UserLocationUpdateView.as_view()),
 ]
