@@ -47,11 +47,11 @@ class UserInfoSerializer(serializers.ModelSerializer):
         return user_info
 
 
-# class UserBorrowStateSerializer(serializers.ModelSerializer):
-#     class Meta:
-#         model = UserBorrowState
-#         fields = "__all__"
-#
+class UserBorrowStateUpdateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = UserInfo
+        fields = "__all__"
+
 
 class UserLocationSerializer(serializers.ModelSerializer):
     class Meta:

@@ -20,10 +20,10 @@ class UserInfoViewSet(ModelViewSet):
 
 class UserBorrowStateUpdateView(generics.UpdateAPIView):
     queryset = UserInfo.objects.all()
-    serializer_class = UserInfoSerializer
+    serializer_class = UserBorrowStateUpdateSerializer
 
     def partial_update(self, request, *args, **kwargs):
-        queryset = self.queryset.get(user__user=self.request.user)
+        queryset = self.queryset.get(user=self.request.user)
         serializer = self.serializer_class(queryset, data=request.data, partial=True)
 
         serializer.is_valid(raise_exception=True)
