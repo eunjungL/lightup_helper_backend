@@ -35,7 +35,6 @@ ALLOWED_HOSTS = [
 
 INSTALLED_APPS = [
     'rest_framework',
-
     'lightup',
     'lightup_restAPI',
     'channels',
@@ -46,6 +45,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'location_field.apps.DefaultConfig',
 ]
 
 MIDDLEWARE = [
@@ -146,5 +146,12 @@ CHANNEL_LAYERS = {
 
 SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': datetime.timedelta(days=100),
+}
+
+LOCATION_FIELD = {
+    'provider.google.api': '//maps.google.com/maps/api/js?sensor=false',
+    'provider.google.api_key': 'AIzaSyAf6aGQH2WoPGghBOxrAL1Oa1O2ySp-vEc',
+    'provider.google.api_libraries': '',
+    'provider.google.map.type': 'ROADMAP',
 }
 
