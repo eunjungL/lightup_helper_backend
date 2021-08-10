@@ -14,6 +14,7 @@ from lightup.models import UserInfo
 def get_user(id):
     return UserInfo.objects.get(user__id=id)
 
+
 class TokenAuthMiddleWare:
     def __init__(self, inner):
         self.inner = inner

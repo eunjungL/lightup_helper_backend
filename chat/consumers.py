@@ -27,25 +27,31 @@ class ChatConsumer(AsyncWebsocketConsumer):
 
     async def receive(self, text_data):
         text_data_json = json.loads(text_data)
-        username = self.scope["user"]
+        user = self.scope["user"]
+        username = await self.get_name(user)
         message = text_data_json['message']
-        room = "room"
+        room = text_data_json['room']
 
-        await self.save_message(username, room, message)
+        await self.save_message(user, room, message)
 
         await self.channel_layer.group_send(
             self.room_group_name,
             {
                 'type': 'chat_message',
-                'message': message
+                'message': message,
+                'username': username,
             }
         )
 
+    # receive message from room group
     async def chat_message(self, event):
         message = event['message']
+        username = event['username']
 
+        # send message to webSocket
         await self.send(text_data=json.dumps({
-            'message': message
+            'message': message,
+            'username': username
         }))
 
     @sync_to_async
@@ -53,5 +59,5 @@ class ChatConsumer(AsyncWebsocketConsumer):
         Message.objects.create(user=username, room=room, content=message).save()
 
     @database_sync_to_async
-    def get_name(self):
-        return UserInfo.objects.get(id=1)
+    def get_name(self, user):
+        return user.user.username
