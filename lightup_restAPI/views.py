@@ -51,6 +51,12 @@ class UserLocationUpdateView(generics.UpdateAPIView):
         return response.Response(serializer.data)
 
 
+# Borrow
+class BorrowStateViewSet(ModelViewSet):
+    queryset = BorrowState.objects.all()
+    serializer_class = BorrowStateSerializer
+
+
 # Chat
 class ChatViewSet(ModelViewSet):
     queryset = Message.objects.all()

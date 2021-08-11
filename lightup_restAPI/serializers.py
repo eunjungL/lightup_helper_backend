@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from lightup.models import *
 from chat.models import Message
+from django.utils import timezone
 from django.contrib.auth.models import User
 from django.contrib.auth.password_validation import validate_password
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
@@ -77,6 +78,25 @@ class BorrowStateSerializer(serializers.ModelSerializer):
     class Meta:
         model = BorrowState
         fields = "__all__"
+
+    def create(self, validated_data):
+        # username 으로 borrower 설정
+        borrow_state = BorrowState.objects.create(
+            borrower=User.objects.get(username=self.context['request'].data['borrower_username']),
+            lender=self.context['request'].user,
+            date=timezone.now()
+        )
+
+        borrow_state.save()
+
+        return borrow_state
+
+    def to_representation(self, instance):
+        ret = super().to_representation(instance)
+        ret['borrower'] = instance.borrower.username
+        ret['lender'] = instance.lender.username
+
+        return ret
 
 
 # Chat
