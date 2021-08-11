@@ -55,3 +55,8 @@ class UserLocationUpdateView(generics.UpdateAPIView):
 class ChatViewSet(ModelViewSet):
     queryset = Message.objects.all()
     serializer_class = MessageSerializer
+
+
+class ChatCreateView(generics.CreateAPIView):
+    queryset = Message.objects.all()
+    serializer_class = MessageSerializer
