@@ -1,3 +1,5 @@
+import json
+
 from rest_framework import serializers
 from lightup.models import *
 from chat.models import Message
@@ -67,10 +69,31 @@ class DonationSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 
-class DonationUser(serializers.ModelSerializer):
+class DonationUserSerializer(serializers.ModelSerializer):
     class Meta:
         model = DonationUser
         fields = "__all__"
+
+    def create(self, validated_data):
+        donation = Donation.objects.get(title=self.context['request'].data['notice_title'])
+
+        donation_user = DonationUser.objects.create(
+            amount=validated_data['amount'],
+            item=donation,
+            user=self.context['request'].user
+        )
+
+        if donation.current_amount + validated_data['amount'] <= donation.target_amount:
+            donation.current_amount = donation.current_amount + validated_data['amount']
+
+        if donation.current_amount >= donation.target_amount:
+            donation.title = "[후원 목표 달성]" + donation.title
+
+        donation.save()
+
+        donation_user.save()
+
+        return donation_user
 
 
 # Borrow
@@ -81,8 +104,14 @@ class BorrowStateSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         # username 으로 borrower 설정
+        borrower = User.objects.get(username=self.context['request'].data['borrower_username'])
+
+        borrower_userinfo = UserInfo.objects.get(user=borrower)
+        borrower_userinfo.point = borrower_userinfo.point + 500
+        borrower_userinfo.save()
+
         borrow_state = BorrowState.objects.create(
-            borrower=User.objects.get(username=self.context['request'].data['borrower_username']),
+            borrower=borrower,
             lender=self.context['request'].user,
             date=timezone.now()
         )

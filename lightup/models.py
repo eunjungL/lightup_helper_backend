@@ -31,15 +31,15 @@ class UserLocation(models.Model):
 class Donation(models.Model):
     company = models.CharField(max_length=200)
     title = models.CharField(max_length=200)
-    target_amount = models.CharField(max_length=45)
-    current_amount = models.CharField(max_length=45)
+    target_amount = models.IntegerField(default=0)
+    current_amount = models.IntegerField(default=0)
     deadline = models.DateTimeField()
 
 
 class DonationUser(models.Model):
     item = models.ForeignKey(Donation, on_delete=models.CASCADE, null=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
-    amount = models.CharField(max_length=45)
+    amount = models.IntegerField(default=0)
 
 
 # Borrow

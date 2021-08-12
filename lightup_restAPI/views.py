@@ -30,6 +30,7 @@ def kakao_login(request):
         f"https://kauth.kakao.com/oauth/authorize?client_id={rest_api_key}&redirect_uri={KAKAO_CALLBACK_URI}&response_type=code"
     )
 
+
 def kakao_callback(request):
     rest_api_key = '98bcbd28d1569d2e928917f853eb03b9'
     KAKAO_CALLBACK_URI = 'http://127.0.0.1:8000/accounts/kakao/login/callback/'
@@ -73,6 +74,17 @@ class UserLocationUpdateView(generics.UpdateAPIView):
         serializer.save()
 
         return response.Response(serializer.data)
+
+
+# Donation
+class DonationViewSet(ModelViewSet):
+    queryset = Donation.objects.all()
+    serializer_class = DonationSerializer
+
+
+class DonationUserViewSet(ModelViewSet):
+    queryset = DonationUser.objects.all()
+    serializer_class = DonationUserSerializer
 
 
 # Borrow

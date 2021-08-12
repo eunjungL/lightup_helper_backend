@@ -24,16 +24,21 @@ router = DefaultRouter()
 router.register(r'users', views.UserInfoViewSet)
 router.register(r'user/location', views.UserLocationViewSet)
 router.register(r'borrow', views.BorrowStateViewSet)
+router.register(r'donation', views.DonationViewSet)
+router.register(r'donation_user', views.DonationUserViewSet)
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include(router.urls)),
 
+    # app login (for app token)
     path('login/', views.LoginView.as_view(), name='token_obtain_pair'),
 
+    # kakao login
     path('accounts/kakao/login/', views.kakao_login),
     path('accounts/kakao/login/callback/', views.kakao_callback),
 
+    # chat
     path('chat/', include('chat.urls')),
 
     # user update
