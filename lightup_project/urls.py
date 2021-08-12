@@ -13,10 +13,12 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
+
 from django.contrib import admin
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
 from lightup_restAPI import views
+from allauth import urls
 
 router = DefaultRouter()
 router.register(r'users', views.UserInfoViewSet)
@@ -28,6 +30,9 @@ urlpatterns = [
     path('', include(router.urls)),
 
     path('login/', views.LoginView.as_view(), name='token_obtain_pair'),
+
+    path('accounts/kakao/login/', views.kakao_login),
+    path('accounts/kakao/login/callback/', views.kakao_callback),
 
     path('chat/', include('chat.urls')),
 

@@ -40,6 +40,13 @@ INSTALLED_APPS = [
     'lightup_restAPI',
     'channels',
     'chat',
+    'django.contrib.sites',
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+    'allauth.socialaccount.providers.kakao',
+    'dj_rest_auth',
+    'dj_rest_auth.registration',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -156,3 +163,6 @@ LOCATION_FIELD = {
     'provider.google.map.type': 'ROADMAP',
 }
 
+LOGIN_REDIRECT_URL = 'http://127.0.0.1:8000/accounts/kakao/login/callback/'
+
+SITE_ID = 1
