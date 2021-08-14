@@ -61,6 +61,12 @@ class UserLocationSerializer(serializers.ModelSerializer):
         model = UserLocation
         fields = "__all__"
 
+    def to_representation(self, instance):
+        ret = super(UserLocationSerializer, self).to_representation(instance)
+        ret['user'] = instance.user.username
+
+        return ret
+
 
 # Donation
 class DonationSerializer(serializers.ModelSerializer):

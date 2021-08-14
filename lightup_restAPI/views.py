@@ -9,6 +9,7 @@ from rest_framework_simplejwt.views import TokenObtainPairView
 from rest_framework import permissions
 from lightup_restAPI.serializers import *
 from rest_framework import generics, response
+from haversine import haversine
 
 
 # User
@@ -61,13 +62,37 @@ class UserLocationViewSet(ModelViewSet):
     queryset = UserLocation.objects.all()
     serializer_class = UserLocationSerializer
 
+    def get_queryset(self):
+        user = self.queryset.get(user=self.request.user)
+
+        user_lat, user_long = user.location.split(',')
+        user_lat = float(user_lat)
+        user_long = float(user_long)
+
+        in_500 = []
+        for other in self.queryset:
+            if other.user == user.user:
+                continue
+
+            lat, long = other.location.split(',')
+            lat = float(lat)
+            long = float(long)
+
+            if haversine((user_lat, user_long), (lat, long), unit='m') < 500:
+                print(haversine((user_lat, user_long), (lat, long), unit='m'))
+                in_500.append(other)
+
+        print(in_500)
+
+        return in_500
+
 
 class UserLocationUpdateView(generics.UpdateAPIView):
     queryset = UserLocation.objects.all()
     serializer_class = UserLocationSerializer
 
     def partial_update(self, request, *args, **kwargs):
-        queryset = self.queryset.get(user__user=self.request.user)
+        queryset = self.queryset.get(user=self.request.user)
         serializer = self.serializer_class(queryset, data=request.data, partial=True)
 
         serializer.is_valid(raise_exception=True)
