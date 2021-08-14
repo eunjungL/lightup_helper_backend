@@ -1,9 +1,13 @@
+import datetime
 import json
 
 from rest_framework import serializers
 from lightup.models import *
 from chat.models import Message
 from django.utils import timezone
+from rest_framework.response import Response
+from rest_framework import status
+from django.http import JsonResponse
 from django.contrib.auth.models import User
 from django.contrib.auth.password_validation import validate_password
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
@@ -82,24 +86,53 @@ class DonationUserSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         donation = Donation.objects.get(title=self.context['request'].data['notice_title'])
+        print(donation)
 
-        donation_user = DonationUser.objects.create(
-            amount=validated_data['amount'],
+        userinfo = UserInfo.objects.get(user=self.context['request'].user)
+        print(userinfo)
+        print(userinfo.point)
+
+        if userinfo.point >= validated_data['amount']:
+            donation_user = DonationUser.objects.create(
+                amount=validated_data['amount'],
+                item=donation,
+                user=self.context['request'].user
+            )
+
+            if donation.current_amount + validated_data['amount'] <= donation.target_amount:
+                donation.current_amount = donation.current_amount + validated_data['amount']
+                userinfo.point = userinfo.point - 500
+                userinfo.save()
+
+                if donation.current_amount >= donation.target_amount:
+                    donation.title = "[후원 목표 달성]" + donation.title
+
+                donation.save()
+                donation_user.save()
+
+            return donation_user
+        else:
+            raise serializers.ValidationError("포인트가 부족합니다.")
+
+
+class DonationCommentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = DonationComment
+        fields = "__all__"
+
+    def create(self, validated_data):
+        donation = Donation.objects.get(title=self.context['request'].data['notice_title'])
+
+        comment = DonationComment.obejcts.create(
             item=donation,
-            user=self.context['request'].user
+            user=self.context['request'].user,
+            context=validated_data['context'],
+            date=timezone.now()
         )
 
-        if donation.current_amount + validated_data['amount'] <= donation.target_amount:
-            donation.current_amount = donation.current_amount + validated_data['amount']
+        comment.save()
 
-        if donation.current_amount >= donation.target_amount:
-            donation.title = "[후원 목표 달성]" + donation.title
-
-        donation.save()
-
-        donation_user.save()
-
-        return donation_user
+        return comment
 
 
 # Borrow
