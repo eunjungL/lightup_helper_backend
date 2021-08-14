@@ -47,7 +47,7 @@ class DonationComment(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
     item = models.ForeignKey(Donation, on_delete=models.CASCADE, null=True)
     context = models.TextField()
-    date = models.DateTimeField()
+    date = models.DateTimeField(null=True)
 
 
 # Borrow

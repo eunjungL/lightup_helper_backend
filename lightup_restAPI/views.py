@@ -112,6 +112,11 @@ class DonationUserViewSet(ModelViewSet):
     serializer_class = DonationUserSerializer
 
 
+class DonationCommentViewSet(ModelViewSet):
+    queryset = DonationComment.objects.all()
+    serializer_class = DonationCommentSerializer
+
+
 # Borrow
 class BorrowStateViewSet(ModelViewSet):
     queryset = BorrowState.objects.all()

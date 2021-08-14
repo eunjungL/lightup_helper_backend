@@ -123,7 +123,7 @@ class DonationCommentSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         donation = Donation.objects.get(title=self.context['request'].data['notice_title'])
 
-        comment = DonationComment.obejcts.create(
+        comment = DonationComment.objects.create(
             item=donation,
             user=self.context['request'].user,
             context=validated_data['context'],
@@ -133,6 +133,12 @@ class DonationCommentSerializer(serializers.ModelSerializer):
         comment.save()
 
         return comment
+
+    def to_representation(self, instance):
+        ret = super(DonationCommentSerializer, self).to_representation(instance)
+        ret['user'] = instance.user.username
+
+        return ret
 
 
 # Borrow

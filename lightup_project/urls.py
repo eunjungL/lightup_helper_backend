@@ -26,6 +26,7 @@ router.register(r'user/location', views.UserLocationViewSet)
 router.register(r'borrow', views.BorrowStateViewSet)
 router.register(r'donation', views.DonationViewSet)
 router.register(r'donation_user', views.DonationUserViewSet)
+router.register(r'donation_comment', views.DonationCommentViewSet)
 
 urlpatterns = [
     path('admin/', admin.site.urls),
