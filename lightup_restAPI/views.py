@@ -107,6 +107,31 @@ class DonationViewSet(ModelViewSet):
     serializer_class = DonationSerializer
 
 
+class DonationLikeView(generics.UpdateAPIView):
+    queryset = Donation.objects.all()
+    serializer_class = DonationSerializer
+
+    def partial_update(self, request, *args, **kwargs):
+        queryset = self.queryset.get(title=self.request.data['notice_title'])
+
+        if self.request.user in queryset.like.all():
+            queryset.like.remove(self.request.user)
+        else:
+            queryset.like.add(self.request.user)
+
+        queryset.save()
+
+        return response.Response(self.serializer_class(queryset).data)
+
+
+class DonationLikeListView(generics.ListAPIView):
+    queryset = Donation.objects.all()
+    serializer_class = DonationSerializer
+
+    def get_queryset(self):
+        return self.queryset.filter(like=self.request.user)
+
+
 class DonationUserViewSet(ModelViewSet):
     queryset = DonationUser.objects.all()
     serializer_class = DonationUserSerializer

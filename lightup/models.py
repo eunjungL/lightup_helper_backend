@@ -35,6 +35,7 @@ class Donation(models.Model):
     target_amount = models.IntegerField(default=0)
     current_amount = models.IntegerField(default=0)
     deadline = models.DateTimeField()
+    like = models.ManyToManyField(User, null=True)
 
 
 class DonationUser(models.Model):

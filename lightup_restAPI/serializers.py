@@ -78,6 +78,12 @@ class DonationSerializer(serializers.ModelSerializer):
         model = Donation
         fields = "__all__"
 
+    def to_representation(self, instance):
+        ret = super(DonationSerializer, self).to_representation(instance)
+        ret['like'] = instance.like.count()
+
+        return ret
+
 
 class DonationUserSerializer(serializers.ModelSerializer):
     class Meta:

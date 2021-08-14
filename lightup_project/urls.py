@@ -46,4 +46,8 @@ urlpatterns = [
     path('update/borrowState/user/', views.UserBorrowStateUpdateView.as_view()),
     path('update/location/user/', views.UserLocationUpdateView.as_view()),
 
+    # like
+    path('like/donation/', views.DonationLikeView.as_view()),
+    path('get/like/donation/', views.DonationLikeListView.as_view()),
+
 ]
