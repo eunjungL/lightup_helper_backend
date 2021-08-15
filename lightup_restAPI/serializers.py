@@ -211,6 +211,7 @@ class CommunityCommentSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         comment = CommunityComment.objects.create(
+            post=CommunityPost.objects.get(id=self.context['request'].data['id']),
             user=self.context['request'].user,
             context=validated_data['context'],
             date=timezone.now()
@@ -221,7 +222,7 @@ class CommunityCommentSerializer(serializers.ModelSerializer):
         return comment
 
     def to_representation(self, instance):
-        ret = super(CommunityPostSerializer, self).to_representation(instance)
+        ret = super(CommunityCommentSerializer, self).to_representation(instance)
         ret['user'] = instance.user.username
         ret['like'] = instance.like.count()
 

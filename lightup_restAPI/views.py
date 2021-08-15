@@ -174,6 +174,14 @@ class CommunityPostLikeView(generics.RetrieveUpdateDestroyAPIView):
         return response.Response(self.serializer_class(post).data)
 
 
+class CommunityCommentViewSet(ModelViewSet):
+    queryset = CommunityComment.objects.all()
+    serializer_class = CommunityCommentSerializer
+
+    def get_queryset(self):
+        return self.queryset.filter(post=self.request.data['post'])
+
+
 # Chat
 class ChatViewSet(ModelViewSet):
     queryset = Message.objects.all()
