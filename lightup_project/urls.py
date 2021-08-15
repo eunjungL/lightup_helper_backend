@@ -27,6 +27,7 @@ router.register(r'borrow', views.BorrowStateViewSet)
 router.register(r'donation', views.DonationViewSet)
 router.register(r'donation_user', views.DonationUserViewSet)
 router.register(r'donation_comment', views.DonationCommentViewSet)
+router.register(r'community_post', views.CommunityPostViewSet)
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -49,5 +50,6 @@ urlpatterns = [
     # like
     path('like/donation/', views.DonationLikeView.as_view()),
     path('get/like/donation/', views.DonationLikeListView.as_view()),
+    path('like/post/', views.CommunityPostLikeView.as_view()),
 
 ]

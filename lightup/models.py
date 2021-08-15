@@ -3,6 +3,7 @@ import time
 from django.db import models
 from django.contrib.auth.models import User
 from location_field.models.plain import PlainLocationField
+from django.utils import timezone
 
 
 # User
@@ -56,3 +57,19 @@ class BorrowState(models.Model):
     borrower = models.ForeignKey(User, on_delete=models.CASCADE, null=True, related_name="borrower")
     lender = models.ForeignKey(User, on_delete=models.CASCADE, null=True, related_name="lender")
     date = models.DateTimeField(null=True)
+
+
+# Community
+class CommunityPost(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, blank=True)
+    context = models.TextField()
+    like = models.ManyToManyField(User, related_name='post_like_user', blank=True)
+    date = models.DateTimeField(blank=True, default=timezone.now())
+
+
+class CommunityComment(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, blank=True)
+    post = models.ForeignKey(CommunityPost, on_delete=models.CASCADE, blank=True)
+    context = models.TextField()
+    like = models.ManyToManyField(User, related_name='comment_like_user', blank=True)
+    date = models.DateTimeField(blank=True, default=timezone.now())

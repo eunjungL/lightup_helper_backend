@@ -179,6 +179,55 @@ class BorrowStateSerializer(serializers.ModelSerializer):
         return ret
 
 
+# Community
+class CommunityPostSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CommunityPost
+        fields = "__all__"
+
+    def create(self, validated_data):
+        post = CommunityPost.objects.create(
+            user=self.context['request'].user,
+            context=validated_data['context'],
+            date=timezone.now()
+        )
+
+        post.save()
+
+        return post
+
+    def to_representation(self, instance):
+        ret = super(CommunityPostSerializer, self).to_representation(instance)
+        ret['user'] = instance.user.username
+        ret['like'] = instance.like.count()
+
+        return ret
+
+
+class CommunityCommentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CommunityComment
+        fields = "__all__"
+
+    def create(self, validated_data):
+        comment = CommunityComment.objects.create(
+            user=self.context['request'].user,
+            context=validated_data['context'],
+            date=timezone.now()
+        )
+
+        comment.save()
+
+        return comment
+
+    def to_representation(self, instance):
+        ret = super(CommunityPostSerializer, self).to_representation(instance)
+        ret['user'] = instance.user.username
+        ret['like'] = instance.like.count()
+
+        return ret
+
+
 # Chat
 class MessageSerializer(serializers.ModelSerializer):
     class Meta:

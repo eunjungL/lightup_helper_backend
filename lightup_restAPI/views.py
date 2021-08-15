@@ -151,6 +151,29 @@ class BorrowStateViewSet(ModelViewSet):
     serializer_class = BorrowStateSerializer
 
 
+# Community
+class CommunityPostViewSet(ModelViewSet):
+    queryset = CommunityPost.objects.all()
+    serializer_class = CommunityPostSerializer
+
+
+class CommunityPostLikeView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = CommunityPost.objects.all()
+    serializer_class = CommunityPostSerializer
+
+    def partial_update(self, request, *args, **kwargs):
+        post = self.queryset.get(id=self.request.data['id'])
+
+        if self.request.user in post.like.all():
+            post.like.remove(self.request.user)
+        else:
+            post.like.add(self.request.user)
+
+        post.save()
+
+        return response.Response(self.serializer_class(post).data)
+
+
 # Chat
 class ChatViewSet(ModelViewSet):
     queryset = Message.objects.all()
