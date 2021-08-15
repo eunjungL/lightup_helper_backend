@@ -22,6 +22,9 @@ class UserInfoViewSet(ModelViewSet):
     queryset = UserInfo.objects.all()
     serializer_class = UserInfoSerializer
 
+    def get_queryset(self):
+        return self.queryset.filter(user=self.request.user)
+
 
 # kakao login
 def kakao_login(request):
