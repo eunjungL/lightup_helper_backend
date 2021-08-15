@@ -37,14 +37,28 @@ def kakao_login(request):
 
 def kakao_callback(request):
     rest_api_key = '98bcbd28d1569d2e928917f853eb03b9'
-    KAKAO_CALLBACK_URI = 'http://127.0.0.1:8000/accounts/kakao/login/callback/'
+    kakao_callback_uri = 'http://127.0.0.1:8000/accounts/kakao/login/callback/'
+    kakao_callback_uri_release = 'http://3.38.51.117:8000/accounts/kakao/login/callback/'
     code = request.GET.get('code')
 
     token_request = requests.get(
-        f"https://kauth.kakao.com/oauth/token?grant_type=authorization_code&client_id={rest_api_key}&redirect_uri={KAKAO_CALLBACK_URI}&code={code}"
+        f"https://kauth.kakao.com/oauth/token?grant_type=authorization_code&client_id={rest_api_key}&redirect_uri={kakao_callback_uri_release}&code={code}"
     )
     token_request_json = token_request.json()
-    return JsonResponse(token_request_json)
+    access_token = token_request_json.get('access_token')
+
+    gender_request = requests.get(
+        f"https://kapi.kakao.com/v2/user/me",
+        headers={"Authorization": f"Bearer {access_token}"}
+    )
+    gender_json = gender_request.json()
+    kakao_account = gender_json.get('kakao_account')
+    print(kakao_account.get('gender'))
+
+    if kakao_account.get('gender') == 'female':
+        return JsonResponse({"check": True})
+    else:
+        return JsonResponse({"check": False})
 
 
 class UserBorrowStateUpdateView(generics.UpdateAPIView):
