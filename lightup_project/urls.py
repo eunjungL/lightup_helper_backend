@@ -52,5 +52,6 @@ urlpatterns = [
     path('like/donation/', views.DonationLikeView.as_view()),
     path('get/like/donation/', views.DonationLikeListView.as_view()),
     path('like/post/', views.CommunityPostLikeView.as_view()),
+    path('like/comment/', views.CommunityCommentLikeView.as_view()),
 
 ]

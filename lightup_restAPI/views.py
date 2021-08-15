@@ -182,6 +182,23 @@ class CommunityCommentViewSet(ModelViewSet):
         return self.queryset.filter(post=self.request.data['post'])
 
 
+class CommunityCommentLikeView(generics.UpdateAPIView):
+    queryset = CommunityComment.objects.all()
+    serializer_class = CommunityCommentSerializer
+
+    def partial_update(self, request, *args, **kwargs):
+        comment = self.queryset.get(id=self.request.data['id'])
+
+        if self.request.user in comment.like.all():
+            comment.like.remove(self.request.user)
+        else:
+            comment.like.add(self.request.user)
+
+        comment.save()
+
+        return response.Response(self.serializer_class(comment).data)
+
+
 # Chat
 class ChatViewSet(ModelViewSet):
     queryset = Message.objects.all()
