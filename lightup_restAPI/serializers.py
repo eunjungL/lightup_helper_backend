@@ -211,7 +211,7 @@ class CommunityCommentSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         comment = CommunityComment.objects.create(
-            post=CommunityPost.objects.get(id=self.context['request'].data['id']),
+            post=CommunityPost.objects.get(id=self.context['request'].data['post']),
             user=self.context['request'].user,
             context=validated_data['context'],
             date=timezone.now()
