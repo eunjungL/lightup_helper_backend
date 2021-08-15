@@ -29,9 +29,10 @@ class UserInfoViewSet(ModelViewSet):
 # kakao login
 def kakao_login(request):
     rest_api_key = '98bcbd28d1569d2e928917f853eb03b9'
-    KAKAO_CALLBACK_URI = 'http://127.0.0.1:8000/accounts/kakao/login/callback/'
+    kakao_callback_uri = 'http://127.0.0.1:8000/accounts/kakao/login/callback/'
+    kakao_callback_uri_release = 'http://3.38.51.117:8000/accounts/kakao/login/callback/'
     return redirect(
-        f"https://kauth.kakao.com/oauth/authorize?client_id={rest_api_key}&redirect_uri={KAKAO_CALLBACK_URI}&response_type=code"
+        f"https://kauth.kakao.com/oauth/authorize?client_id={rest_api_key}&redirect_uri={kakao_callback_uri_release}&response_type=code"
     )
 
 
