@@ -105,6 +105,14 @@ class UserLocationViewSet(ModelViewSet):
         return in_500
 
 
+class UserLocationGetView(generics.ListAPIView):
+    queryset = UserLocation.objects.all()
+    serializer_class = UserLocationSerializer
+
+    def get_queryset(self):
+        return self.queryset.filter(user=self.request.user)
+
+
 class UserLocationUpdateView(generics.UpdateAPIView):
     queryset = UserLocation.objects.all()
     serializer_class = UserLocationSerializer
@@ -164,6 +172,22 @@ class DonationCommentViewSet(ModelViewSet):
 class BorrowStateViewSet(ModelViewSet):
     queryset = BorrowState.objects.all()
     serializer_class = BorrowStateSerializer
+
+
+class BorrowStateLendGetView(generics.ListAPIView):
+    queryset = BorrowState.objects.all()
+    serializer_class = BorrowStateSerializer
+
+    def get_queryset(self):
+        return self.queryset.filter(lender=self.request.user)
+
+
+class BorrowStateBorrowGetView(generics.ListAPIView):
+    queryset = BorrowState.objects.all()
+    serializer_class = BorrowStateSerializer
+
+    def get_queryset(self):
+        return self.queryset.filter(borrower=self.request.user)
 
 
 # Community
