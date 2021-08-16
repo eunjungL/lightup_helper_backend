@@ -66,12 +66,14 @@ class UserLocationSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
     def create(self, validated_data):
-        location, created = UserLocation.objects.get_or_create(
-            user=self.context['request'].user,
-            location=validated_data['location']
-        )
+        if UserLocation.objects.filter(user=self.context['request'].user):
+            return UserLocation.objects.get(user=self.context['request'].user)
+        else:
+            location = UserLocation.objects.create(
+                user=self.context['request'].user,
+                location=validated_data['location']
+            )
 
-        if created:
             location.save()
 
         return location
