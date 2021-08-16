@@ -107,7 +107,7 @@ class DonationUserSerializer(serializers.ModelSerializer):
 
             if donation.current_amount + validated_data['amount'] <= donation.target_amount:
                 donation.current_amount = donation.current_amount + validated_data['amount']
-                userinfo.point = userinfo.point - 500
+                userinfo.point = userinfo.point - validated_data['amount']
                 userinfo.save()
 
                 if donation.current_amount >= donation.target_amount:
