@@ -65,6 +65,17 @@ class UserLocationSerializer(serializers.ModelSerializer):
         model = UserLocation
         fields = "__all__"
 
+    def create(self, validated_data):
+        location, created = UserLocation.objects.get_or_create(
+            user=self.context['request'].user,
+            location=validated_data['location']
+        )
+
+        if created:
+            location.save()
+
+        return location
+
     def to_representation(self, instance):
         ret = super(UserLocationSerializer, self).to_representation(instance)
         ret['user'] = instance.user.username
