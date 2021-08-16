@@ -44,6 +44,9 @@ urlpatterns = [
     # chat
     path('chat/', include('chat.urls')),
 
+    # location
+    path('my/location/', views.UserLocationGetView.as_view()),
+
     # user update
     path('update/borrowState/user/', views.UserBorrowStateUpdateView.as_view()),
     path('update/location/user/', views.UserLocationUpdateView.as_view()),
