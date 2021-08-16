@@ -174,6 +174,22 @@ class BorrowStateViewSet(ModelViewSet):
     serializer_class = BorrowStateSerializer
 
 
+class BorrowStateLendGetView(generics.ListAPIView):
+    queryset = BorrowState.objects.all()
+    serializer_class = BorrowStateSerializer
+
+    def get_queryset(self):
+        return self.queryset.filter(lender=self.request.user)
+
+
+class BorrowStateBorrowGetView(generics.ListAPIView):
+    queryset = BorrowState.objects.all()
+    serializer_class = BorrowStateSerializer
+
+    def get_queryset(self):
+        return self.queryset.filter(borrower=self.request.user)
+
+
 # Community
 class CommunityPostViewSet(ModelViewSet):
     queryset = CommunityPost.objects.all()

@@ -57,4 +57,8 @@ urlpatterns = [
     path('like/post/', views.CommunityPostLikeView.as_view()),
     path('like/comment/', views.CommunityCommentLikeView.as_view()),
 
+    # get borrow/lend
+    path('get/borrow/', views.BorrowStateBorrowGetView.as_view()),
+    path('get/lend/', views.BorrowStateLendGetView.as_view()),
+
 ]
