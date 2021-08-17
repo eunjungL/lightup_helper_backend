@@ -167,6 +167,9 @@ class DonationCommentViewSet(ModelViewSet):
     queryset = DonationComment.objects.all()
     serializer_class = DonationCommentSerializer
 
+    def get_queryset(self):
+        return self.queryset.filter(id=self.request.data['id'])
+
 
 # Borrow
 class BorrowStateViewSet(ModelViewSet):
