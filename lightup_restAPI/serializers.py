@@ -170,20 +170,33 @@ class BorrowStateSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         # username 으로 borrower 설정
         borrower = User.objects.get(username=self.context['request'].data['borrower_username'])
+        borrower_borrow = BorrowState.objects.filter(borrower=borrower)
 
         borrower_userinfo = UserInfo.objects.get(user=borrower)
-        borrower_userinfo.point = borrower_userinfo.point + 500
-        borrower_userinfo.save()
+        lender_userinfo = UserInfo.objects.get(user=self.context['request'].user)
 
-        borrow_state = BorrowState.objects.create(
-            borrower=borrower,
-            lender=self.context['request'].user,
-            date=timezone.now()
-        )
+        if lender_userinfo.can_borrow > 0:
+            borrower_userinfo.point += 500
+            if borrower_borrow.count() % 5 == 0:
+                borrower_userinfo.can_borrow += 2
+            else:
+                borrower_userinfo.can_borrow += 1
+            borrower_userinfo.save()
 
-        borrow_state.save()
+            lender_userinfo.can_borrow -= 1
 
-        return borrow_state
+            lender_userinfo.save()
+
+            borrow_state = BorrowState.objects.create(
+                borrower=borrower,
+                lender=self.context['request'].user,
+                date=timezone.now()
+            )
+
+            borrow_state.save()
+            return borrow_state
+        else:
+            raise serializers.ValidationError('빌릴 수 있는 횟수가 부족합니다.')
 
     def to_representation(self, instance):
         ret = super().to_representation(instance)
