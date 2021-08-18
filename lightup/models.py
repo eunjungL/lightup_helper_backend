@@ -82,6 +82,7 @@ class CommunityPost(models.Model):
     context = models.TextField()
     like = models.ManyToManyField(User, related_name='post_like_user', blank=True)
     date = models.DateTimeField(blank=True, default=timezone.now())
+    photo = models.ImageField(upload_to="%Y/%m/%d", null=True)
 
     def __str__(self):
         return self.context

@@ -216,6 +216,7 @@ class CommunityPostSerializer(serializers.ModelSerializer):
         post = CommunityPost.objects.create(
             user=self.context['request'].user,
             context=validated_data['context'],
+            photo=validated_data['photo'],
             date=timezone.now()
         )
 

@@ -18,6 +18,8 @@ from django.contrib import admin
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
 from lightup_restAPI import views
+from django.conf import settings
+from django.conf.urls.static import static
 from allauth import urls
 
 router = DefaultRouter()
@@ -61,4 +63,4 @@ urlpatterns = [
     path('get/borrow/', views.BorrowStateBorrowGetView.as_view()),
     path('get/lend/', views.BorrowStateLendGetView.as_view()),
 
-]
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
