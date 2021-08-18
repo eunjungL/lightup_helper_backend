@@ -29,6 +29,9 @@ class UserLocation(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, null=True)
     location = PlainLocationField()
 
+    def __str__(self):
+        return self.user.username
+
 
 # Donation
 class Donation(models.Model):
@@ -40,11 +43,17 @@ class Donation(models.Model):
     deadline = models.DateTimeField(null=True)
     like = models.ManyToManyField(User, null=True)
 
+    def __str__(self):
+        return self.title
+
 
 class DonationUser(models.Model):
     item = models.ForeignKey(Donation, on_delete=models.CASCADE, null=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
     amount = models.IntegerField(default=0)
+
+    def __str__(self):
+        return self.user.username
 
 
 class DonationComment(models.Model):
@@ -53,12 +62,18 @@ class DonationComment(models.Model):
     context = models.TextField()
     date = models.DateTimeField(null=True)
 
+    def __str__(self):
+        return self.item.title
+
 
 # Borrow
 class BorrowState(models.Model):
     borrower = models.ForeignKey(User, on_delete=models.CASCADE, null=True, related_name="borrower")
     lender = models.ForeignKey(User, on_delete=models.CASCADE, null=True, related_name="lender")
     date = models.DateTimeField(null=True)
+
+    def __str__(self):
+        return self.borrower
 
 
 # Community
@@ -68,6 +83,9 @@ class CommunityPost(models.Model):
     like = models.ManyToManyField(User, related_name='post_like_user', blank=True)
     date = models.DateTimeField(blank=True, default=timezone.now())
 
+    def __str__(self):
+        return self.context
+
 
 class CommunityComment(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, blank=True)
@@ -75,3 +93,6 @@ class CommunityComment(models.Model):
     context = models.TextField()
     like = models.ManyToManyField(User, related_name='comment_like_user', blank=True)
     date = models.DateTimeField(blank=True, default=timezone.now())
+
+    def __str__(self):
+        return self.context
