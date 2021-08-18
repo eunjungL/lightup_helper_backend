@@ -48,6 +48,7 @@ class UserInfoSerializer(serializers.ModelSerializer):
 
         user_info = UserInfo.objects.create(
             user=user,
+            nickname=validated_data['nickname']
         )
         user_info.save()
 

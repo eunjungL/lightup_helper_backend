@@ -11,6 +11,8 @@ class UserInfo(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, null=True)
     lend_state = models.BooleanField(default=False)
     borrow_state = models.BooleanField(default=False)
+    nickname = models.CharField(max_length=45, default='익명')
+    can_borrow = models.PositiveIntegerField(default=3)
     point = models.PositiveIntegerField(default=0)
 
     def __str__(self):
