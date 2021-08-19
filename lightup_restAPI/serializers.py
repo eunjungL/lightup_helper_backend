@@ -103,6 +103,7 @@ class DonationUserSerializer(serializers.ModelSerializer):
     class Meta:
         model = DonationUser
         fields = "__all__"
+        depth = 1
 
     def create(self, validated_data):
         donation = Donation.objects.get(title=self.context['request'].data['notice_title'])
