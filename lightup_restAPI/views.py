@@ -168,7 +168,10 @@ class DonationCommentViewSet(ModelViewSet):
     serializer_class = DonationCommentSerializer
 
     def get_queryset(self):
-        return self.queryset.filter(item=self.request.data['id'])
+        donation_id = self.request.query_params.get('id')
+        donation = Donation.objects.get(id=donation_id)
+
+        return self.queryset.filter(item=donation)
 
 
 # Borrow
