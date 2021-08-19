@@ -172,6 +172,9 @@ class DonationUserViewSet(ModelViewSet):
     queryset = DonationUser.objects.all()
     serializer_class = DonationUserSerializer
 
+    def get_queryset(self):
+        return self.queryset.filter(user=self.request.user)
+
 
 class DonationCommentViewSet(ModelViewSet):
     queryset = DonationComment.objects.all()
