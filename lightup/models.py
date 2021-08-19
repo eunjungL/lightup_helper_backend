@@ -42,6 +42,8 @@ class Donation(models.Model):
     current_amount = models.IntegerField(default=0)
     deadline = models.DateTimeField(null=True)
     like = models.ManyToManyField(User, null=True)
+    photo = models.ImageField(upload_to="%Y/%m/%d", null=True)
+    photo_content = models.ImageField(upload_to="%Y/%m/%d", null=True)
 
     def __str__(self):
         return self.title
