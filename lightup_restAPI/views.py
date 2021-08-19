@@ -92,6 +92,8 @@ class UserLocationViewSet(ModelViewSet):
             if other.user == user.user:
                 continue
 
+            print(other)
+
             lat, long = other.location.split(',')
             lat = float(lat)
             long = float(long)
