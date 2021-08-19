@@ -221,7 +221,10 @@ class CommunityCommentViewSet(ModelViewSet):
     serializer_class = CommunityCommentSerializer
 
     def get_queryset(self):
-        return self.queryset.filter(post=self.request.data['post'])
+        post_id = self.request.query_params.get('id')
+        post = CommunityPost.objects.get(id=post_id)
+
+        return self.queryset.filter(post=post)
 
 
 class CommunityCommentLikeView(generics.UpdateAPIView):
