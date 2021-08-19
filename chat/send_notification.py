@@ -5,7 +5,7 @@ APIKey = "AAAA5_P06TA:APA91bHWs9LZLi2_yu4Pqxr2RyzEbAToDyyvpoxm_eeEzUTTBr7wyDMwpA
 push_service = FCMNotification(APIKey)
 
 
-def send_message(receive_user, send_user, context):
+def send_noti(receive_user, send_user, context):
     data_message = {
         "contents": context,
         "title": "%s에게서 새로운 메시지가 왔습니다." % send_user

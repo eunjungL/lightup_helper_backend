@@ -4,7 +4,7 @@ from asgiref.sync import sync_to_async
 from chat.models import Message
 from lightup.models import UserInfo
 from channels.db import database_sync_to_async
-from send_notification import send_message
+from send_notification import send_noti
 from django.http import request, HttpResponse
 
 
@@ -36,7 +36,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
         await self.save_message(user, room, message)
 
         receive_user = room.replace(username, "")
-        send_message(receive_user, username, message)
+        send_noti(receive_user, username, message)
 
         await self.channel_layer.group_send(
             self.room_group_name,
