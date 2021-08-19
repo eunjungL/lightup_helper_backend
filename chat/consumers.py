@@ -80,4 +80,4 @@ def send_noti(receive_user, send_user, context):
 
     result = push_service.notify_topic_subscribers(topic_name=receive_user, data_message=data_message)
 
-    print(result)
+    print(data_message)
