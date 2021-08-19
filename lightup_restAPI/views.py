@@ -89,18 +89,18 @@ class UserLocationViewSet(ModelViewSet):
 
         in_500 = []
         for other in self.queryset:
-            if other.user == user.user:
-                continue
+            other_info = UserInfo.objects.get(user=other.user)
 
-            print(other)
+            if (other.user != user.user) & other_info.lend_state:
+                print(other)
 
-            lat, long = other.location.split(',')
-            lat = float(lat)
-            long = float(long)
+                lat, long = other.location.split(',')
+                lat = float(lat)
+                long = float(long)
 
-            if haversine((user_lat, user_long), (lat, long), unit='m') < 500:
-                print(haversine((user_lat, user_long), (lat, long), unit='m'))
-                in_500.append(other)
+                if haversine((user_lat, user_long), (lat, long), unit='m') < 500:
+                    print(haversine((user_lat, user_long), (lat, long), unit='m'))
+                    in_500.append(other)
 
         print(in_500)
 
