@@ -10,6 +10,14 @@ from rest_framework import permissions
 from lightup_restAPI.serializers import *
 from rest_framework import generics, response
 from haversine import haversine
+from rest_framework.decorators import action
+from pyfcm import FCMNotification
+from django.views.decorators.csrf import csrf_exempt
+from django.utils.decorators import method_decorator
+
+APIKey = "AAAA5_P06TA:APA91bHWs9LZLi2_yu4Pqxr2RyzEbAToDyyvpoxm_eeEzUTTBr7wyDMwpAQUvrLQesTg6bU-T7fN263ww4mPrDD7Ya1OuEDQKcyLG4ETdJt5ZaN_oHrUSHVT3NGw2iaERn8EYyDhs2b6"
+
+push_service = FCMNotification(APIKey)
 
 
 # User
@@ -263,3 +271,44 @@ class ChatViewSet(ModelViewSet):
 class ChatCreateView(generics.CreateAPIView):
     queryset = Message.objects.all()
     serializer_class = MessageSerializer
+
+
+# Send Notification
+class NotificationViewSet(ModelViewSet):
+    queryset = UserLocation.objects.all()
+    serializer_class = UserLocationSerializer
+
+    def get_queryset(self):
+        user = self.queryset.get(user=self.request.user)
+
+        user_lat, user_long = user.location.split(',')
+        user_lat = float(user_lat)
+        user_long = float(user_long)
+
+        in_500 = []
+        for other in self.queryset:
+            other_info = UserInfo.objects.get(user=other.user)
+
+            if (other.user != user.user) & other_info.lend_state:
+                print(other)
+
+                lat, long = other.location.split(',')
+                lat = float(lat)
+                long = float(long)
+
+                if haversine((user_lat, user_long), (lat, long), unit='m') < 500:
+                    print(haversine((user_lat, user_long), (lat, long), unit='m'))
+                    in_500.append(other)
+
+        print(in_500)
+
+        data_message = {
+            "contents": "500m 이내에 대여 요청이 있습니다.",
+            "title": "새로운 대여 요청이 왔습니다."
+        }
+
+        for receive_user in in_500:
+            result = push_service.notify_topic_subscribers(topic_name=receive_user, data_message=data_message)
+            print(result)
+
+        return in_500

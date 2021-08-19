@@ -31,6 +31,7 @@ router.register(r'donation_user', views.DonationUserViewSet)
 router.register(r'donation_comment', views.DonationCommentViewSet)
 router.register(r'community_post', views.CommunityPostViewSet)
 router.register(r'community_comment', views.CommunityCommentViewSet)
+router.register(r'send/borrow_notification', views.NotificationViewSet)
 
 urlpatterns = [
     path('admin/', admin.site.urls),
