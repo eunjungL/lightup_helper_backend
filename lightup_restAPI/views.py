@@ -252,6 +252,11 @@ class ChatViewSet(ModelViewSet):
     queryset = Message.objects.all()
     serializer_class = MessageSerializer
 
+    def get_queryset(self):
+        room_name = self.request.query_params.get('room')
+
+        return self.queryset.filter(room=room_name)
+
 
 class ChatCreateView(generics.CreateAPIView):
     queryset = Message.objects.all()
